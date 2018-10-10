@@ -1,8 +1,14 @@
 package io.pivotal.pal.tracker;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 
 public class InMemoryTimeEntryRepository implements TimeEntryRepository {
 
@@ -13,30 +19,34 @@ public class InMemoryTimeEntryRepository implements TimeEntryRepository {
         iD = iD+1;
         TimeEntry savedEntry =
                 new TimeEntry(iD, timeEntry.getProjectId(), timeEntry.getUserId(), timeEntry.getDate(), timeEntry.getHours());
-        memMap.put(iD, savedEntry);
+        this.memMap.put(iD, savedEntry);
         return savedEntry;
     }
 
     public TimeEntry find(Long id) {
-        return memMap.get(id);
+
+        return this.memMap.get(id);
     }
 
     public TimeEntry update(Long id, TimeEntry timeEntry) {
-        if (memMap.containsKey(id)) {
+        if (this.memMap.containsKey(id)) {
             TimeEntry updatedEntry =
                     new TimeEntry(id, timeEntry.getProjectId(), timeEntry.getUserId(), timeEntry.getDate(), timeEntry.getHours());
-            memMap.put(id, updatedEntry);
+            this.memMap.put(id, updatedEntry);
             return updatedEntry;
         }
         return null;
     }
 
     public void delete(Long id) {
-        memMap.remove(id);
+
+        this.memMap.remove(id);
     }
 
-    public List<TimeEntry> list() {
-        return null;
+    public List<TimeEntry> list()
+    {
+        return memMap.values().stream().collect(Collectors.toList());
+
     }
 
 }
