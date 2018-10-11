@@ -13,7 +13,6 @@ import java.util.List;
 public class TimeEntryController {
 
 
-
     private CounterService counter;
     private GaugeService gauge;
     private TimeEntryRepository timeEntriesRepo;
